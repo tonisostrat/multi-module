@@ -1,0 +1,16 @@
+dependencies {
+    /**
+     * The lightest Spring Framework dependency possible to get access to the annotations for component scanning.
+     *
+     * Currently not necessary as the `data` module already exposes `spring-data-jpa` as an API and this dependency
+     * is inherited through it. Ideally, however, we'd like to avoid inheriting framework dependencies through modules
+     * (because what if `data` uses a custom query library instead of Spring Data?) and then this dependency becomes
+     * necessary.
+     *
+     * This approach also promotes complete encapsulation inside modules making them easier to refactor or even
+     * spin off as stand-alone libraries.
+     */
+    implementation('org.springframework:spring-context')
+
+    api project(':modules:data')
+}

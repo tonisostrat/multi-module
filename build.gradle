@@ -1,0 +1,48 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
+plugins {
+    /**
+     * We're not automatically applying the plugin as we don't want to leak any Spring Boot-related tasks to all the
+     * subprojects - only `entrypoint` is the one which should inherit them.
+     *
+     * The plugin is included here, however, instead of the `entrypoint` package directly because we want to leverage
+     * the included `dependency-management` plugin in our subprojects because we're lazy and don't want to explicitly
+     * define version numbers everywhere. See the `dependencyManagement` block further down.
+     */
+    id('org.springframework.boot') version('2.2.6.RELEASE') apply(false)
+}
+
+/**
+ * As Gradle does not understand the `modules` directory is not one of the projects but just a grouping directory
+ * we exclude it from the configuration phase.
+ *
+ * Technically this is not necessary but I personally prefer a cleaner sub-tree
+ */
+configure(
+    subprojects.findAll { it.name != 'modules' }
+) {
+    apply plugin: 'java-library'
+    apply plugin: 'io.spring.dependency-management'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom(SpringBootPlugin.BOM_COORDINATES)
+        }
+    }
+
+    /**
+     * We include the Slf4J API here so we can access the `LoggerFactory` in each project. You don't have to worry
+     * about the implementation library as Spring Boot ships with Logback and that's already on the classpath
+     * thanks to the `entrypoint` module
+     *
+     * This dependency will more than likely become obsolete as you expand the project because other dependencies you
+     * add might already include it transitively.
+     */
+    dependencies {
+        implementation('org.slf4j:slf4j-api')
+    }
+}

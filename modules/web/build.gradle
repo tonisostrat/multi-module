@@ -1,0 +1,14 @@
+dependencies {
+    /**
+     * As the Spring team has gone to a lot of trouble to create these convenient starter-packs we're depending on one
+     * to get the web layer up but we're also explicitly excluding the core `spring-boot-starter` to showcase that it's
+     * not necessary anymore - `entrypoint` takes care of it.
+     *
+     * The exclude can also be removed if, for example, you need to access any of the core functionality.
+     */
+    implementation('org.springframework.boot:spring-boot-starter-web') {
+        exclude module: 'spring-boot-starter'
+    }
+
+    api project(':modules:core')
+}

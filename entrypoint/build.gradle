@@ -1,0 +1,14 @@
+/**
+ * Here we *enable* the SB plugin imported in the root build file.
+ */
+apply plugin: 'org.springframework.boot'
+
+dependencies {
+    /**
+     * We just need access to the core of Spring Boot because this package does not care what kind of application
+     * you're building.
+     */
+    implementation('org.springframework.boot:spring-boot-starter')
+
+    implementation project(':modules:web')
+}

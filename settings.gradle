@@ -1,0 +1,6 @@
+include(
+    ':entrypoint',
+    ':modules:web',
+    ':modules:core',
+    ':modules:data'
+)
